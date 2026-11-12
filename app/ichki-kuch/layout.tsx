@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Iman Akhmedovna",
-  description: "Official website of Iman Akhmedovna.",
+  description: "Official webinar website of Iman Akhmedovna.",
   authors: [{ name: "@bakxriyevvv" }],
   creator: "@bakxriyevvv",
   publisher: "Iman Akhmedovna",
