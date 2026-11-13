@@ -69,6 +69,8 @@ const FOR_WHO = [
   "O‘tmishdagi hafagarchiliklar, og‘riqlar va ichki ranjishlardan xalos bo‘lishni istasangiz.",
   "O‘zingizni qadrlash, ichki ishonch va xotirjamlikni qayta tiklashni xohlasangiz.",
   "Hayotingizda baraka, yangi boshlanish va orzularingizga ishonch bilan erishishni istasangiz.",
+  "Qarzdorlik, kreditlardan xalos bo‘lib, moliyaviy erkinlikka erishishni istasangiz.",
+  "Er-xotin munosabatlarini yanada yaxshilash, qadrli va suyukli rafiqa bo‘lishni xohlasangiz. Shuningdek, turmushga tayyorlanish istagidagilar uchun ham mos.",
 ];
 
 const GIFTS = [
@@ -358,7 +360,9 @@ export default function VSLPage() {
             <div className="rounded-[28px] border-2 border-[#e6c47c] bg-[#fbf3e4] p-6 text-center sm:p-9">
               <p className="text-[34px]" aria-hidden="true">🎁</p>
               <h2 className={`${serif.className} text-balance text-[22px] font-bold leading-[1.3] text-[#6b0426] sm:text-[32px]`}>
-                «ICHKI KUCH» kursiga yozilsangiz, 3 mln so‘m qiymatga ega 2 ta KURS BONUSGA BEPUL BERILADI
+                «Ichki uyg‘onish» kursiga yozilib, naqd{" "}
+                <span className="whitespace-nowrap rounded-xl bg-[#6b0426] px-3 py-0.5 text-[1.15em] font-extrabold text-[#f3d68f]">3 000 000</span>{" "}
+                so‘mlik 2 ta eng kuchli kurslarni <span className="text-[#b8893a]">BEPUL</span> qo‘lga kiriting
               </h2>
             </div>
 
@@ -386,14 +390,14 @@ export default function VSLPage() {
         <section className="px-5 pb-12 sm:pb-16">
           <div className="mx-auto max-w-[860px] rounded-[28px] border-2 border-[#e6c47c] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_10px_30px_rgba(74,2,32,.08)] sm:p-9">
             <h2 className={`${serif.className} text-balance text-center text-[24px] font-bold leading-[1.25] text-[#6b0426] sm:text-[34px]`}>
-              «ICHKI KUCH» kursiga yozilmasangiz, nimalar yoqotasiz?
+              «Ichki uyg‘onish» kursiga yozilmasangiz, nimalar yoqotasiz?
             </h2>
             <ul className="mt-6 flex flex-col gap-4">
               {LOSSES.map((l) => (
                 <li key={l.b} className="flex items-start gap-3 text-[16px] leading-relaxed sm:text-[17px]">
                   <Check />
                   <span>
-                    <b className="text-[#6b0426]">{l.b}</b> {l.t}
+                    <b className="text-[#6b0426]">{l.b}</b> — {l.t}
                   </span>
                 </li>
               ))}
@@ -404,6 +408,40 @@ export default function VSLPage() {
             <div className="mt-8 flex justify-center">
               <CTAButton dark />
             </div>
+          </div>
+        </section>
+
+        {/* ============ 6. NATIJALAR VA OTZIVLAR ============ */}
+        <section className="px-5 pb-14 sm:pb-20">
+          <div className="mx-auto max-w-[980px]">
+            <SectionTitle dark>Natijalar va otzivlar — o‘quvchilarniki</SectionTitle>
+            <div className="mt-9 flex items-center justify-between px-1 text-[13px] font-semibold text-[#6b0426]/80">
+              <span>{REVIEWS.length} ta natija</span>
+              <span className="flex items-center gap-1">Suring <span className="ik-wiggle">→</span></span>
+            </div>
+            <div className="relative mt-3">
+              <ol
+                ref={revRef}
+                className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                aria-label="Natijalar va otzivlar"
+              >
+                {REVIEWS.map((src, i) => (
+                  <li key={src} className="w-[72%] max-w-[300px] shrink-0 snap-center sm:w-[280px]">
+                    <button
+                      type="button"
+                      onClick={() => setZoom(src)}
+                      aria-label={`Natija ${i + 1} ni kattalashtirish`}
+                      className="block w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)]"
+                    >
+                      <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 72vw, 300px" loading={i === 0 ? "eager" : "lazy"} className="h-auto w-full" />
+                    </button>
+                  </li>
+                ))}
+              </ol>
+              <button type="button" onClick={() => slideReviews(-1)} aria-label="Oldingi" className="absolute left-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">←</button>
+              <button type="button" onClick={() => slideReviews(1)} aria-label="Keyingi" className="absolute right-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">→</button>
+            </div>
+            <p className="mt-3 text-center text-[13px] text-[#6b0426]/70">Rasmni bossangiz, to‘liq ko‘rinadi</p>
           </div>
         </section>
 
@@ -485,7 +523,7 @@ export default function VSLPage() {
             </div>
 
             <p className={`${serif.className} mt-8 text-balance text-[19px] font-semibold leading-snug text-[#fbeccb] sm:text-[24px]`}>
-              Hoziroq imkoniyatdan foydalaning. Siz ham ichki kuchingizni shakllantirib, chiroyli o‘zgarishlarga loyiqsiz ✨
+              Hoziroq imkoniyatdan foydalaning. Siz ham ichki uyg‘onish orqali chiroyli o‘zgarishlarga loyiqsiz ✨
             </p>
           </div>
         </section>
@@ -557,40 +595,6 @@ export default function VSLPage() {
                 </div>
               </article>
             </div>
-          </div>
-        </section>
-
-        {/* ============ 9. NATIJALAR VA OTZIVLAR ============ */}
-        <section className="px-5 pb-14 sm:pb-20">
-          <div className="mx-auto max-w-[980px]">
-            <SectionTitle dark>Natijalar va otzivlar — o‘quvchilarniki</SectionTitle>
-            <div className="mt-9 flex items-center justify-between px-1 text-[13px] font-semibold text-[#6b0426]/80">
-              <span>{REVIEWS.length} ta natija</span>
-              <span className="flex items-center gap-1">Suring <span className="ik-wiggle">→</span></span>
-            </div>
-            <div className="relative mt-3">
-              <ol
-                ref={revRef}
-                className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                aria-label="Natijalar va otzivlar"
-              >
-                {REVIEWS.map((src, i) => (
-                  <li key={src} className="w-[72%] max-w-[300px] shrink-0 snap-center sm:w-[280px]">
-                    <button
-                      type="button"
-                      onClick={() => setZoom(src)}
-                      aria-label={`Natija ${i + 1} ni kattalashtirish`}
-                      className="block w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)]"
-                    >
-                      <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 72vw, 300px" className="h-auto w-full" />
-                    </button>
-                  </li>
-                ))}
-              </ol>
-              <button type="button" onClick={() => slideReviews(-1)} aria-label="Oldingi" className="absolute left-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">←</button>
-              <button type="button" onClick={() => slideReviews(1)} aria-label="Keyingi" className="absolute right-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">→</button>
-            </div>
-            <p className="mt-3 text-center text-[13px] text-[#6b0426]/70">Rasmni bossangiz, to‘liq ko‘rinadi</p>
           </div>
         </section>
 
