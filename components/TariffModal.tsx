@@ -114,7 +114,7 @@ export default function TariffModal({
             disabled={loading}
             className="mt-2 w-full rounded-full bg-gradient-to-b from-[#fbe6aa] via-[#e2b865] to-[#a97a30] py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#3f0119] shadow-[0_5px_0_0_#6f4d16] transition active:translate-y-[3px] disabled:opacity-60"
           >
-            {loading ? "Yuborilmoqda..." : "Kursga yozilish"}
+            {loading ? "Yuborilmoqda..." : "Menejer bilan bog'lanish"}
           </button>
           <p className="text-center text-[12px] text-[#6b0426]/70">
             Tugmani bosgach, Telegramda admin bilan chat ochiladi
