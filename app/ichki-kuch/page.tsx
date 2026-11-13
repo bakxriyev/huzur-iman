@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Playfair_Display, Montserrat } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TariffModal, { type Tarif } from "@/components/TariffModal";
 
 const PERSON_IMG = "/iman.png"; // public/iman.png
@@ -228,6 +228,12 @@ export default function VSLPage() {
   const [left, setLeft] = useState<number | null>(null);
   const [tarif, setTarif] = useState<Tarif | null>(null);
   const [zoom, setZoom] = useState<string | null>(null);
+  const revRef = useRef<HTMLOListElement>(null);
+  const slideReviews = (dir: 1 | -1) => {
+    const el = revRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior: "smooth" });
+  };
 
   useEffect(() => {
     const KEY = "ik_deadline_v1";
@@ -280,17 +286,15 @@ export default function VSLPage() {
               23-noyabr · Ichki uyg‘onish
             </p>
 
-            <h1 className={`${serif.className} ${GOLD} mt-5 text-[clamp(40px,11vw,100px)] font-bold leading-[1.12] tracking-[0.02em]`}>
-              ICHKI KUCH
-            </h1>
-
-            <p className="mt-4 max-w-[560px] text-[15px] font-bold uppercase leading-snug tracking-wide text-[#fbeccb] sm:text-[20px]">
+            {/* Kichik shriftdagi qator */}
+            <p className="mt-4 max-w-[480px] text-[12px] font-semibold uppercase leading-snug tracking-wide text-[#fbeccb] sm:text-[14px]">
               45 kun Iman Akhmedova bilan birga jonli dars
             </p>
 
-            <p className={`${serif.className} mt-6 max-w-[620px] text-balance text-[21px] font-semibold leading-[1.3] text-white sm:text-[30px]`}>
+            {/* Asosiy (glavniy) gap */}
+            <h1 className={`${serif.className} ${GOLD} mt-5 text-balance text-[clamp(30px,8.2vw,64px)] font-bold leading-[1.18]`}>
               Qanday qilib minnatdorchilik orqali qalb xotirjamligiga erishish mumkin?
-            </p>
+            </h1>
 
             <div className="relative mt-8 w-full max-w-[300px] sm:max-w-[360px]">
               <div aria-hidden="true" className="ik-glow absolute left-1/2 top-[10%] h-[75%] w-[85%] -translate-x-1/2 rounded-full bg-[#ff9ccb]/40 blur-3xl" />
@@ -311,10 +315,28 @@ export default function VSLPage() {
           </div>
         </section>
 
-        {/* ============ 2. SIZNI NIMALAR KUTYAPTI ============ */}
+        {/* ============ 2. KURS KIMLAR UCHUN (rasmdan keyin) ============ */}
         <section className="px-5 py-14 sm:py-20">
+          <div className="mx-auto max-w-[760px] rounded-[32px] bg-[linear-gradient(160deg,#7a0a2e_0%,#5a0322_55%,#3f0119_100%)] p-6 text-white shadow-[0_20px_50px_rgba(74,2,32,.3)] sm:p-10">
+            <h2 className={`${serif.className} ${GOLD} text-center text-[26px] font-bold leading-[1.25] sm:text-[38px]`}>Kurs kimlar uchun?</h2>
+            <p className="mt-4 text-center text-[16px] leading-relaxed text-[#fbeccb]">
+              «Ichki Uyg‘onish» kursi aynan siz uchun, agar:
+            </p>
+            <ul className="mt-6 flex flex-col gap-4">
+              {FOR_WHO.map((t) => (
+                <li key={t} className="flex items-start gap-3 rounded-2xl border border-[#e6c47c]/30 bg-white/5 p-4 text-[16px] leading-relaxed">
+                  <Check light />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ============ 3. KURSDA SIZNI NIMALAR KUTYAPTI ============ */}
+        <section className="px-5 pb-14 sm:pb-20">
           <div className="mx-auto max-w-[980px]">
-            <SectionTitle dark>Sizni nimalar kutyapti:</SectionTitle>
+            <SectionTitle dark>Kursda sizni nimalar kutyapti:</SectionTitle>
             <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {STATS.map((s) => (
                 <div key={s.big} className="rounded-[28px] border border-[#e6c47c]/60 bg-[linear-gradient(160deg,#7a0a2e_0%,#5a0322_55%,#3f0119_100%)] p-6 text-center shadow-[0_14px_34px_rgba(74,2,32,.25)] sm:p-8">
@@ -323,10 +345,14 @@ export default function VSLPage() {
                 </div>
               ))}
             </div>
+
+            <div className="mt-10 flex justify-center">
+              <CTAButton label="Darsga qo‘shilish" dark />
+            </div>
           </div>
         </section>
 
-        {/* ============ 7. BONUS VA HADYALAR ============ */}
+        {/* ============ 4. BONUS VA HADYALAR ============ */}
         <section className="px-5 pb-14 sm:pb-20">
           <div className="mx-auto max-w-[860px]">
             <div className="rounded-[28px] border-2 border-[#e6c47c] bg-[#fbf3e4] p-6 text-center sm:p-9">
@@ -336,7 +362,7 @@ export default function VSLPage() {
               </h2>
             </div>
 
-            <div className="mt-6 rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
+            <div className="mt-6 rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_10px_30px_rgba(74,2,32,.08)] sm:p-9">
               <h3 className={`${serif.className} text-balance text-center text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
                 Kursni muvaffaqiyatli yakunlasangiz, quyidagi sovg‘alar egasi bo‘lishingiz mumkin
               </h3>
@@ -351,55 +377,12 @@ export default function VSLPage() {
             </div>
 
             <div className="mt-10 flex justify-center">
-              <CTAButton />
+              <CTAButton dark />
             </div>
           </div>
         </section>
 
-        {/* ============ 3. AFZALLIKLAR ============ */}
-        <section className="px-5 pb-10 sm:pb-14">
-          <div className="mx-auto max-w-[860px]">
-            <SectionTitle dark>Kursning asosiy afzalliklari va tafsilotlari</SectionTitle>
-            <div className="mt-9 flex flex-col gap-5">
-              <article className="rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
-                <h3 className={`${serif.className} text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
-                  Haftada 2 marta jonli darslar{" "}
-                  <span className="whitespace-nowrap">(1 soatdan)</span>
-                </h3>
-                <ul className="mt-5 flex flex-col gap-4">
-                  {[
-                    "Shaxsan Iman Akhmedovaning o‘zlari olib boradigan eksklyuziv jonli muloqot va darslar.",
-                    "Har bir darsda o‘zgarish sari tashlanadigan aniq va tushunarli qadamlar.",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-3 text-[16px] leading-relaxed sm:text-[17px]">
-                      <Check />
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-
-              <article className="rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
-                <h3 className={`${serif.className} text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
-                  «O‘zgaraman» mualliflik qo‘llanmasi asosida
-                </h3>
-                <ul className="mt-5 flex flex-col gap-4">
-                  {[
-                    "Kichik qadamlar bilan o‘z maqsadingiz sari ishonchli harakat qilish uchun maxsus tuzilgan yo‘riqnoma.",
-                    "Hayotni tizimlashtirish, vaqtni boshqarish va ichki intizomni kuchaytirish sirlari.",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-3 text-[16px] leading-relaxed sm:text-[17px]">
-                      <Check />
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* ============ YOZILMASANGIZ NIMALAR YOQOTASIZ ============ */}
+        {/* ============ 5. YOZILMASANGIZ NIMALAR YOQOTASIZ ============ */}
         <section className="px-5 pb-12 sm:pb-16">
           <div className="mx-auto max-w-[860px] rounded-[28px] border-2 border-[#e6c47c] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_10px_30px_rgba(74,2,32,.08)] sm:p-9">
             <h2 className={`${serif.className} text-balance text-center text-[24px] font-bold leading-[1.25] text-[#6b0426] sm:text-[34px]`}>
@@ -410,7 +393,7 @@ export default function VSLPage() {
                 <li key={l.b} className="flex items-start gap-3 text-[16px] leading-relaxed sm:text-[17px]">
                   <Check />
                   <span>
-                    <b className="text-[#6b0426]">{l.b}</b> — {l.t}
+                    <b className="text-[#6b0426]">{l.b}</b> {l.t}
                   </span>
                 </li>
               ))}
@@ -424,7 +407,7 @@ export default function VSLPage() {
           </div>
         </section>
 
-        {/* ============ 4. KURS MAVZULARI ============ */}
+        {/* ============ 6. KURS MAVZULARI ============ */}
         <section className="relative px-5 pb-20 pt-16 text-white sm:pb-28 sm:pt-24" style={DARK_STYLE}>
           <WaveEdge />
           <WaveEdge flip />
@@ -462,119 +445,10 @@ export default function VSLPage() {
           </div>
         </section>
 
-        {/* ============ 5. TARIFLAR ============ */}
-        <section id="tariflar" className="scroll-mt-4 px-5 py-14 sm:py-20">
-          <div className="mx-auto max-w-[980px]">
-            <SectionTitle dark>Kurs tariflari</SectionTitle>
-            <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
-              {/* VIP */}
-              <article className="flex flex-col rounded-[28px] border-2 border-[#e6c47c] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 shadow-[0_16px_40px_rgba(74,2,32,.15)] sm:p-8">
-                <span className="w-fit rounded-full bg-[#6b0426] px-4 py-1.5 text-[12px] font-bold tracking-[0.14em] text-white">JONLI FORMAT</span>
-                <h3 className={`${serif.className} mt-3 text-[26px] font-bold leading-[1.15] text-[#6b0426] sm:text-[32px]`}>VIP tarifda nimalar bor</h3>
-                <ul className="mt-6 flex flex-col gap-3">
-                  {VIP.map((t, i) => (
-                    <li key={t} className="flex items-start gap-3 text-[16px] leading-snug">
-                      <Check />
-                      <span className={i === 0 ? "font-bold text-[#6b0426]" : ""}>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-7">
-                  <p className="text-center text-[14px] text-[#6b0426]/70">
-                    <s>6.990.000 so‘m</s>
-                  </p>
-                  <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
-                    699.000 <span className="text-[22px]">so‘m</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setTarif("VIP")}
-                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
-                  >
-                    Kursga yozilish
-                  </button>
-                </div>
-              </article>
-
-              {/* PREMIUM */}
-              <article className="flex flex-col rounded-[28px] border border-[#6b0426]/20 bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-8">
-                <span className="w-fit rounded-full bg-[#6b0426] px-4 py-1.5 text-[12px] font-bold tracking-[0.14em] text-white">YOZIB OLINGAN FORMAT</span>
-                <h3 className={`${serif.className} mt-3 text-[26px] font-bold leading-[1.15] text-[#6b0426] sm:text-[32px]`}>Premium tarifda nimalar bor</h3>
-                <ul className="mt-6 flex flex-col gap-3">
-                  {PREMIUM.map((t, i) => (
-                    <li key={t} className="flex items-start gap-3 text-[16px] leading-snug">
-                      <Check />
-                      <span className={i === 0 ? "font-bold text-[#6b0426]" : ""}>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 rounded-2xl bg-[#6b0426] px-4 py-4 text-center text-white">
-                  <p className="text-[16px] font-bold sm:text-[18px]">12 ta dars + 30 kunlik qo‘llanma</p>
-                  <p className="text-[13px] italic opacity-85">qalb xotirjamligi uchun</p>
-                </div>
-                <div className="mt-auto pt-7">
-                  <p className="text-center text-[14px] text-[#6b0426]/70">
-                    <s>3.990.000 so‘m</s>
-                  </p>
-                  <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
-                    399.000 <span className="text-[22px]">so‘m</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setTarif("Premium")}
-                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
-                  >
-                    Kursga yozilish
-                  </button>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* ============ 6. KURS KIMLAR UCHUN ============ */}
-        <section className="px-5 pb-14 sm:pb-20">
-          <div className="mx-auto max-w-[760px] rounded-[32px] bg-[linear-gradient(160deg,#7a0a2e_0%,#5a0322_55%,#3f0119_100%)] p-6 text-white shadow-[0_20px_50px_rgba(74,2,32,.3)] sm:p-10">
-            <h2 className={`${serif.className} ${GOLD} text-center text-[26px] font-bold leading-[1.25] sm:text-[38px]`}>Kurs kimlar uchun?</h2>
-            <p className="mt-4 text-center text-[16px] leading-relaxed text-[#fbeccb]">
-              «Ichki Uyg‘onish» kursi aynan siz uchun, agar:
-            </p>
-            <ul className="mt-6 flex flex-col gap-4">
-              {FOR_WHO.map((t) => (
-                <li key={t} className="flex items-start gap-3 rounded-2xl border border-[#e6c47c]/30 bg-white/5 p-4 text-[16px] leading-relaxed">
-                  <Check light />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ============ 8. NATIJALAR VA OTZIVLAR ============ */}
-        <section className="px-5 pb-14 sm:pb-20">
-          <div className="mx-auto max-w-[980px]">
-            <SectionTitle dark>Natijalar va otzivlar — o‘quvchilarniki</SectionTitle>
-            <div className="mt-9 columns-2 gap-3 sm:columns-3 sm:gap-4">
-              {REVIEWS.map((src, i) => (
-                <button
-                  key={src}
-                  type="button"
-                  onClick={() => setZoom(src)}
-                  aria-label={`Natija ${i + 1} ni kattalashtirish`}
-                  className="mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)] sm:mb-4"
-                >
-                  <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 50vw, 320px" className="h-auto w-full" />
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 text-center text-[13px] text-[#6b0426]/70">Rasmni bossangiz, to‘liq ko‘rinadi</p>
-          </div>
-        </section>
-
-        {/* ============ 9. CHEGIRMA + TAYMER ============ */}
+        {/* ============ 7. MAXSUS CHEGIRMA + TAYMER (kurs mavzularidan keyin) ============ */}
         <section className="relative px-5 pb-24 pt-24 text-white sm:pb-32 sm:pt-32" style={DARK_STYLE}>
           <WaveEdge />
-          <WaveEdge flip fill="#2f0113" />
+          <WaveEdge flip />
           <div className="mx-auto max-w-[760px] text-center">
             <span className="inline-block rounded-full bg-gradient-to-b from-[#f7dd9d] to-[#b78a3d] px-6 py-2 text-[16px] font-extrabold text-[#4a0220] sm:text-[20px]">
               90% CHEGIRMA
@@ -613,6 +487,110 @@ export default function VSLPage() {
             <p className={`${serif.className} mt-8 text-balance text-[19px] font-semibold leading-snug text-[#fbeccb] sm:text-[24px]`}>
               Hoziroq imkoniyatdan foydalaning. Siz ham ichki kuchingizni shakllantirib, chiroyli o‘zgarishlarga loyiqsiz ✨
             </p>
+          </div>
+        </section>
+
+        {/* ============ 8. TARIFLAR ============ */}
+        <section id="tariflar" className="scroll-mt-4 px-5 py-14 sm:py-20">
+          <div className="mx-auto max-w-[980px]">
+            <SectionTitle dark>Kurs tariflari</SectionTitle>
+            <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
+              {/* VIP */}
+              <article className="flex flex-col rounded-[28px] border-2 border-[#e6c47c] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_16px_40px_rgba(74,2,32,.15)] sm:p-8">
+                <span className="w-fit rounded-full bg-[#6b0426] px-4 py-1.5 text-[12px] font-bold tracking-[0.14em] text-white">JONLI FORMAT</span>
+                <h3 className={`${serif.className} mt-3 text-[26px] font-bold leading-[1.15] text-[#6b0426] sm:text-[32px]`}>VIP tarifda nimalar bor</h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {VIP.map((t, i) => (
+                    <li key={t} className="flex items-start gap-3 text-[16px] leading-snug">
+                      <Check />
+                      <span className={i === 0 ? "font-bold text-[#6b0426]" : ""}>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto pt-7">
+                  <p className="text-center text-[14px] text-[#6b0426]/70">
+                    <s>6.990.000 so‘m</s>
+                  </p>
+                  <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
+                    699.000 <span className="text-[22px]">so‘m</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setTarif("VIP")}
+                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
+                  >
+                    Kursga yozilish
+                  </button>
+                </div>
+              </article>
+
+              {/* PREMIUM */}
+              <article className="flex flex-col rounded-[28px] border border-[#6b0426]/20 bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_10px_30px_rgba(74,2,32,.08)] sm:p-8">
+                <span className="w-fit rounded-full bg-[#6b0426] px-4 py-1.5 text-[12px] font-bold tracking-[0.14em] text-white">YOZIB OLINGAN FORMAT</span>
+                <h3 className={`${serif.className} mt-3 text-[26px] font-bold leading-[1.15] text-[#6b0426] sm:text-[32px]`}>Premium tarifda nimalar bor</h3>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {PREMIUM.map((t, i) => (
+                    <li key={t} className="flex items-start gap-3 text-[16px] leading-snug">
+                      <Check />
+                      <span className={i === 0 ? "font-bold text-[#6b0426]" : ""}>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 rounded-2xl bg-[#6b0426] px-4 py-4 text-center text-white">
+                  <p className="text-[16px] font-bold sm:text-[18px]">12 ta dars + 30 kunlik qo‘llanma</p>
+                  <p className="text-[13px] italic opacity-85">qalb xotirjamligi uchun</p>
+                </div>
+                <div className="mt-auto pt-7">
+                  <p className="text-center text-[14px] text-[#6b0426]/70">
+                    <s>3.990.000 so‘m</s>
+                  </p>
+                  <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
+                    399.000 <span className="text-[22px]">so‘m</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setTarif("Premium")}
+                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
+                  >
+                    Kursga yozilish
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ 9. NATIJALAR VA OTZIVLAR ============ */}
+        <section className="px-5 pb-14 sm:pb-20">
+          <div className="mx-auto max-w-[980px]">
+            <SectionTitle dark>Natijalar va otzivlar — o‘quvchilarniki</SectionTitle>
+            <div className="mt-9 flex items-center justify-between px-1 text-[13px] font-semibold text-[#6b0426]/80">
+              <span>{REVIEWS.length} ta natija</span>
+              <span className="flex items-center gap-1">Suring <span className="ik-wiggle">→</span></span>
+            </div>
+            <div className="relative mt-3">
+              <ol
+                ref={revRef}
+                className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                aria-label="Natijalar va otzivlar"
+              >
+                {REVIEWS.map((src, i) => (
+                  <li key={src} className="w-[72%] max-w-[300px] shrink-0 snap-center sm:w-[280px]">
+                    <button
+                      type="button"
+                      onClick={() => setZoom(src)}
+                      aria-label={`Natija ${i + 1} ni kattalashtirish`}
+                      className="block w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)]"
+                    >
+                      <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 72vw, 300px" className="h-auto w-full" />
+                    </button>
+                  </li>
+                ))}
+              </ol>
+              <button type="button" onClick={() => slideReviews(-1)} aria-label="Oldingi" className="absolute left-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">←</button>
+              <button type="button" onClick={() => slideReviews(1)} aria-label="Keyingi" className="absolute right-0 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#6b0426] text-xl text-[#f3d68f] shadow-lg sm:flex">→</button>
+            </div>
+            <p className="mt-3 text-center text-[13px] text-[#6b0426]/70">Rasmni bossangiz, to‘liq ko‘rinadi</p>
           </div>
         </section>
 
