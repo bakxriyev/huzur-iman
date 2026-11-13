@@ -3,13 +3,13 @@
 import Image from "next/image";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import { useEffect, useState } from "react";
+import TariffModal, { type Tarif } from "@/components/TariffModal";
 
-const BOT_URL = `https://t.me/+O0gStv0XzjkzODli`;
 const PERSON_IMG = "/iman.png"; // public/iman.png
 
 /** O‘quvchilar natijalari/otzivlari: rasmlarni public/ papkaga qo‘yib, shu yerga yozing.
  *  Masalan: ["/otziv-1.jpg", "/otziv-2.jpg"]. Bo‘sh bo‘lsa, joy ushlagichlar ko‘rinadi. */
-const REVIEWS: string[] = [];
+const REVIEWS: string[] = [1, 2, 3, 4, 5, 6, 7].map((n) => `/natijalar/natija-${n}.webp`);
 
 const serif = Playfair_Display({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -81,6 +81,12 @@ const GIFTS = [
   "21 kunlik qo‘llanma",
 ];
 
+const LOSSES = [
+  { b: "Orzularingizga yaqinlashishda", t: "qo‘rquv va ikkilanishlar o‘rniga ishonch bilan harakat qilishni" },
+  { b: "Ichki o‘zgarish imkoniyatidan", t: "45 kun davomida o‘zingizni anglash, fikrlaringizni tartibga solish va hayotingizga yangicha nigoh bilan qarashni" },
+  { b: "Iman Akhmedova bilan jonli muloqotdan", t: "shaxsiy rivojlanishingiz uchun muhim bilimlar va amaliy tavsiyalarni olishni yoqotishingiz mumkin" },
+];
+
 const GOLD =
   "bg-gradient-to-b from-[#fff6d8] via-[#ecc97f] to-[#b8893a] bg-clip-text text-transparent";
 const DARK_BG =
@@ -107,12 +113,12 @@ function Check({ light = false }: { light?: boolean }) {
   );
 }
 
-function UpArrow({ delay = "0s" }: { delay?: string }) {
+function UpArrow({ delay = "0s", dark = false }: { delay?: string; dark?: boolean }) {
   return (
     <svg
       viewBox="0 0 48 72"
       aria-hidden="true"
-      className="ik-up h-12 w-8 shrink-0 text-[#f3d68f] drop-shadow-[0_4px_10px_rgba(230,196,124,.5)] sm:h-16 sm:w-11"
+      className={`ik-up h-12 w-8 shrink-0 ${dark ? "text-[#b8893a]" : "text-[#f3d68f]"} drop-shadow-[0_4px_10px_rgba(230,196,124,.5)] sm:h-16 sm:w-11`}
       style={{ animationDelay: delay }}
       fill="currentColor"
     >
@@ -148,16 +154,19 @@ function WaveEdge({ flip = false, fill = "#f7ecdf" }: { flip?: boolean; fill?: s
   );
 }
 
-function CTAButton({ label = "Ishtirok etish" }: { label?: string }) {
+function goToTariffs() {
+  document.getElementById("tariflar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function CTAButton({ label = "Kursga yozilish", dark = false }: { label?: string; dark?: boolean }) {
   return (
     <div className="flex w-full flex-col items-center">
       <div className="relative w-full max-w-[540px]">
         <span aria-hidden="true" className="ik-ring pointer-events-none absolute inset-0 rounded-full border-2 border-[#f3d68f]" />
-        <a
-          href={BOT_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ik-cta relative isolate flex min-h-[78px] w-full items-center justify-center gap-3 overflow-hidden rounded-full border-[3px] border-[#fff3d1]/80 bg-gradient-to-b from-[#fbe6aa] via-[#e2b865] to-[#a97a30] px-6 py-5 text-[20px] font-extrabold uppercase tracking-wide text-[#3f0119] no-underline shadow-[0_7px_0_0_#6f4d16,0_18px_38px_rgba(0,0,0,.4)] transition-transform duration-100 hover:translate-y-[2px] active:translate-y-[5px] sm:min-h-[96px] sm:text-[28px]"
+        <button
+          type="button"
+          onClick={goToTariffs}
+          className="ik-cta relative isolate flex min-h-[78px] w-full items-center justify-center gap-3 overflow-hidden rounded-full border-[3px] border-[#fff3d1]/80 bg-gradient-to-b from-[#fbe6aa] via-[#e2b865] to-[#a97a30] px-6 py-5 text-[20px] font-extrabold uppercase tracking-wide text-[#3f0119] shadow-[0_7px_0_0_#6f4d16,0_18px_38px_rgba(0,0,0,.4)] transition-transform duration-100 hover:translate-y-[2px] active:translate-y-[5px] sm:min-h-[96px] sm:text-[28px]"
         >
           <span className="ik-shine absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/50 blur-md" />
           <span className="relative z-10">{label}</span>
@@ -165,15 +174,15 @@ function CTAButton({ label = "Ishtirok etish" }: { label?: string }) {
             <path d="M3 12h16" />
             <path d="M12 5l7 7-7 7" />
           </svg>
-        </a>
+        </button>
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-4 sm:gap-7">
-        <UpArrow />
-        <span className="text-center text-[13px] font-bold uppercase tracking-wide text-[#fbeccb] sm:text-[16px]">
-          Tugmani bosing
+        <UpArrow dark={dark} />
+        <span className={`text-center text-[13px] font-bold uppercase tracking-wide sm:text-[16px] ${dark ? "text-[#6b0426]" : "text-[#fbeccb]"}`}>
+          Joylar soni cheklangan
         </span>
-        <UpArrow delay=".25s" />
+        <UpArrow dark={dark} delay=".25s" />
       </div>
     </div>
   );
@@ -217,6 +226,8 @@ function Timer({ left }: { left: number | null }) {
 export default function VSLPage() {
   // 24 soatlik taymer: har bir tashrif buyuruvchi uchun brauzerda saqlanadi
   const [left, setLeft] = useState<number | null>(null);
+  const [tarif, setTarif] = useState<Tarif | null>(null);
+  const [zoom, setZoom] = useState<string | null>(null);
 
   useEffect(() => {
     const KEY = "ik_deadline_v1";
@@ -266,7 +277,7 @@ export default function VSLPage() {
 
           <div className="ik-hero relative z-10 mx-auto flex max-w-[820px] flex-col items-center text-center">
             <p className="rounded-full border border-[#e6c47c]/60 bg-[#46021b]/60 px-5 py-2 text-[13px] font-bold tracking-wide text-[#f3d68f] sm:text-[15px]">
-              23-noyabr
+              23-noyabr · Ichki uyg‘onish
             </p>
 
             <h1 className={`${serif.className} ${GOLD} mt-5 text-[clamp(40px,11vw,100px)] font-bold leading-[1.12] tracking-[0.02em]`}>
@@ -315,14 +326,45 @@ export default function VSLPage() {
           </div>
         </section>
 
-        {/* ============ 3. AFZALLIKLAR ============ */}
+        {/* ============ 7. BONUS VA HADYALAR ============ */}
         <section className="px-5 pb-14 sm:pb-20">
+          <div className="mx-auto max-w-[860px]">
+            <div className="rounded-[28px] border-2 border-[#e6c47c] bg-[#fbf3e4] p-6 text-center sm:p-9">
+              <p className="text-[34px]" aria-hidden="true">🎁</p>
+              <h2 className={`${serif.className} text-balance text-[22px] font-bold leading-[1.3] text-[#6b0426] sm:text-[32px]`}>
+                «ICHKI KUCH» kursiga yozilsangiz, 3 mln so‘m qiymatga ega 2 ta KURS BONUSGA BEPUL BERILADI
+              </h2>
+            </div>
+
+            <div className="mt-6 rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
+              <h3 className={`${serif.className} text-balance text-center text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
+                Kursni muvaffaqiyatli yakunlasangiz, quyidagi sovg‘alar egasi bo‘lishingiz mumkin
+              </h3>
+              <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {GIFTS.map((g) => (
+                  <li key={g} className="flex items-center gap-3 rounded-2xl bg-white/70 px-4 py-3 text-[16px] font-semibold">
+                    <span aria-hidden="true">🎁</span>
+                    <span>{g}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-10 flex justify-center">
+              <CTAButton />
+            </div>
+          </div>
+        </section>
+
+        {/* ============ 3. AFZALLIKLAR ============ */}
+        <section className="px-5 pb-10 sm:pb-14">
           <div className="mx-auto max-w-[860px]">
             <SectionTitle dark>Kursning asosiy afzalliklari va tafsilotlari</SectionTitle>
             <div className="mt-9 flex flex-col gap-5">
               <article className="rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
                 <h3 className={`${serif.className} text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
-                  Haftada 2 marta jonli darslar (1 soatdan)
+                  Haftada 2 marta jonli darslar{" "}
+                  <span className="whitespace-nowrap">(1 soatdan)</span>
                 </h3>
                 <ul className="mt-5 flex flex-col gap-4">
                   {[
@@ -357,8 +399,33 @@ export default function VSLPage() {
           </div>
         </section>
 
+        {/* ============ YOZILMASANGIZ NIMALAR YOQOTASIZ ============ */}
+        <section className="px-5 pb-12 sm:pb-16">
+          <div className="mx-auto max-w-[860px] rounded-[28px] border-2 border-[#e6c47c] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] p-6 shadow-[0_10px_30px_rgba(74,2,32,.08)] sm:p-9">
+            <h2 className={`${serif.className} text-balance text-center text-[24px] font-bold leading-[1.25] text-[#6b0426] sm:text-[34px]`}>
+              «ICHKI KUCH» kursiga yozilmasangiz, nimalar yoqotasiz?
+            </h2>
+            <ul className="mt-6 flex flex-col gap-4">
+              {LOSSES.map((l) => (
+                <li key={l.b} className="flex items-start gap-3 text-[16px] leading-relaxed sm:text-[17px]">
+                  <Check />
+                  <span>
+                    <b className="text-[#6b0426]">{l.b}</b> — {l.t}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className={`${serif.className} mt-7 text-balance text-center text-[19px] font-semibold leading-snug text-[#6b0426] sm:text-[24px]`}>
+              Eng muhimi, bugun boshlashingiz mumkin bo‘lgan o‘zgarishni yana bir kunga kechiktirasiz, shuning uchun hoziroq kursga yoziling ⤵️
+            </p>
+            <div className="mt-8 flex justify-center">
+              <CTAButton dark />
+            </div>
+          </div>
+        </section>
+
         {/* ============ 4. KURS MAVZULARI ============ */}
-        <section className="relative px-5 pb-24 pt-24 text-white sm:pb-32 sm:pt-32" style={DARK_STYLE}>
+        <section className="relative px-5 pb-20 pt-16 text-white sm:pb-28 sm:pt-24" style={DARK_STYLE}>
           <WaveEdge />
           <WaveEdge flip />
           <div className="mx-auto max-w-[980px]">
@@ -368,13 +435,23 @@ export default function VSLPage() {
             </h2>
             <Ornament className="mt-5" />
 
-            <ol className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-4">
+            <div className="mt-10 flex items-center justify-between px-1 text-[13px] font-semibold text-[#f3d68f]/90">
+              <span>{TOPICS.length} ta mavzu</span>
+              <span className="flex items-center gap-1">Suring <span className="ik-wiggle">→</span></span>
+            </div>
+            <ol
+              className="-mx-5 mt-3 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              aria-label="Kurs mavzulari"
+            >
               {TOPICS.map((t, i) => (
-                <li key={t} className="flex items-center gap-4 rounded-full border border-[#e6c47c]/60 bg-gradient-to-r from-[#6b0426]/70 to-[#4a0220]/80 py-3 pl-3 pr-6 shadow-[0_8px_22px_rgba(0,0,0,.25)]">
-                  <span className={`${serif.className} flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#e6c47c]/70 text-[22px] font-bold text-[#f3d68f]`}>
+                <li
+                  key={t}
+                  className="flex min-h-[210px] w-[78%] max-w-[320px] shrink-0 snap-center flex-col items-center justify-center gap-5 rounded-[28px] border border-[#e6c47c]/60 bg-gradient-to-b from-[#6b0426]/80 to-[#4a0220]/90 p-6 text-center shadow-[0_10px_26px_rgba(0,0,0,.28)] sm:w-[300px]"
+                >
+                  <span className={`${serif.className} flex h-16 w-16 items-center justify-center rounded-full border border-[#e6c47c]/70 text-[30px] font-bold text-[#f3d68f]`}>
                     {i + 1}
                   </span>
-                  <span className={`${serif.className} text-[17px] font-semibold leading-snug text-[#fbeccb] sm:text-[19px]`}>{t}</span>
+                  <span className={`${serif.className} text-balance text-[21px] font-semibold leading-snug text-[#fbeccb]`}>{t}</span>
                 </li>
               ))}
             </ol>
@@ -386,7 +463,7 @@ export default function VSLPage() {
         </section>
 
         {/* ============ 5. TARIFLAR ============ */}
-        <section className="px-5 py-14 sm:py-20">
+        <section id="tariflar" className="scroll-mt-4 px-5 py-14 sm:py-20">
           <div className="mx-auto max-w-[980px]">
             <SectionTitle dark>Kurs tariflari</SectionTitle>
             <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -409,6 +486,13 @@ export default function VSLPage() {
                   <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
                     699.000 <span className="text-[22px]">so‘m</span>
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setTarif("VIP")}
+                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
+                  >
+                    Kursga yozilish
+                  </button>
                 </div>
               </article>
 
@@ -435,6 +519,13 @@ export default function VSLPage() {
                   <p className={`${serif.className} text-center text-[36px] font-bold leading-none text-[#6b0426]`}>
                     399.000 <span className="text-[22px]">so‘m</span>
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setTarif("Premium")}
+                    className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
+                  >
+                    Kursga yozilish
+                  </button>
                 </div>
               </article>
             </div>
@@ -459,47 +550,24 @@ export default function VSLPage() {
           </div>
         </section>
 
-        {/* ============ 7. BONUS VA HADYALAR ============ */}
-        <section className="px-5 pb-14 sm:pb-20">
-          <div className="mx-auto max-w-[860px]">
-            <div className="rounded-[28px] border-2 border-[#e6c47c] bg-[#fbf3e4] p-6 text-center sm:p-9">
-              <p className="text-[34px]" aria-hidden="true">🎁</p>
-              <h2 className={`${serif.className} text-balance text-[22px] font-bold leading-[1.3] text-[#6b0426] sm:text-[32px]`}>
-                «ICHKI KUCH» kursiga yozilsangiz, 3 mln so‘m qiymatga ega 2 ta KURS BONUSGA BEPUL BERILADI
-              </h2>
-            </div>
-
-            <div className="mt-6 rounded-[28px] bg-[linear-gradient(180deg,#f9efe3_0%,#efdfcd_100%)] shadow-[0_10px_30px_rgba(74,2,32,.08)] p-6 sm:p-9">
-              <h3 className={`${serif.className} text-balance text-center text-[22px] font-bold leading-[1.25] text-[#6b0426] sm:text-[28px]`}>
-                Kursni muvaffaqiyatli yakunlasangiz, quyidagi sovg‘alar egasi bo‘lishingiz mumkin
-              </h3>
-              <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {GIFTS.map((g) => (
-                  <li key={g} className="flex items-center gap-3 rounded-2xl bg-white/70 px-4 py-3 text-[16px] font-semibold">
-                    <span aria-hidden="true">🎁</span>
-                    <span>{g}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
         {/* ============ 8. NATIJALAR VA OTZIVLAR ============ */}
         <section className="px-5 pb-14 sm:pb-20">
           <div className="mx-auto max-w-[980px]">
             <SectionTitle dark>Natijalar va otzivlar — o‘quvchilarniki</SectionTitle>
-            <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-              {REVIEWS.length > 0
-                ? REVIEWS.map((src, i) => (
-                    <Image key={src} src={src} alt={`O‘quvchi fikri ${i + 1}`} width={600} height={900} className="h-auto w-full rounded-2xl shadow-[0_10px_26px_rgba(74,2,32,.18)]" />
-                  ))
-                : [1, 2, 3].map((n) => (
-                    <div key={n} className="flex aspect-[3/4] items-center justify-center rounded-2xl border-2 border-dashed border-[#6b0426]/30 bg-white/50 p-4 text-center text-[13px] font-semibold text-[#6b0426]/60">
-                      Otziv rasmi {n}
-                    </div>
-                  ))}
+            <div className="mt-9 columns-2 gap-3 sm:columns-3 sm:gap-4">
+              {REVIEWS.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setZoom(src)}
+                  aria-label={`Natija ${i + 1} ni kattalashtirish`}
+                  className="mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)] sm:mb-4"
+                >
+                  <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 50vw, 320px" className="h-auto w-full" />
+                </button>
+              ))}
             </div>
+            <p className="mt-3 text-center text-[13px] text-[#6b0426]/70">Rasmni bossangiz, to‘liq ko‘rinadi</p>
           </div>
         </section>
 
@@ -539,7 +607,7 @@ export default function VSLPage() {
             </div>
 
             <div className="mt-8 flex justify-center">
-              <CTAButton label="Hoziroq yozilish" />
+              <CTAButton label="Kursga yozilish" />
             </div>
 
             <p className={`${serif.className} mt-8 text-balance text-[19px] font-semibold leading-snug text-[#fbeccb] sm:text-[24px]`}>
@@ -560,6 +628,14 @@ export default function VSLPage() {
           </div>
         </footer>
       </main>
+      {zoom && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 p-3" onClick={() => setZoom(null)} role="dialog" aria-modal="true">
+          <button type="button" aria-label="Yopish" className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-xl text-black">✕</button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={zoom} alt="Natija" className="max-h-full max-w-full rounded-xl object-contain" />
+        </div>
+      )}
+      <TariffModal tarif={tarif} onClose={() => setTarif(null)} />
     </>
   );
 }
