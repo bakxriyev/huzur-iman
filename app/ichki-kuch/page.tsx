@@ -9,7 +9,15 @@ const PERSON_IMG = "/iman.webp"; // public/iman.webp
 
 /** O‘quvchilar natijalari/otzivlari: rasmlarni public/ papkaga qo‘yib, shu yerga yozing.
  *  Masalan: ["/otziv-1.jpg", "/otziv-2.jpg"]. Bo‘sh bo‘lsa, joy ushlagichlar ko‘rinadi. */
-const REVIEWS: string[] = [1, 2, 3, 4, 5, 6, 7].map((n) => `/natijalar/natija-${n}.webp`);
+const REVIEWS: { src: string; width: number; height: number }[] = [
+  { src: "/natijalar/natija-1.webp", width: 700, height: 1176 },
+  { src: "/natijalar/natija-2.webp", width: 700, height: 1245 },
+  { src: "/natijalar/natija-3.webp", width: 700, height: 525 },
+  { src: "/natijalar/natija-4.webp", width: 700, height: 903 },
+  { src: "/natijalar/natija-5.webp", width: 700, height: 699 },
+  { src: "/natijalar/natija-6.webp", width: 700, height: 853 },
+  { src: "/natijalar/natija-7.webp", width: 700, height: 930 },
+];
 
 const serif = Playfair_Display({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -426,15 +434,15 @@ export default function VSLPage() {
                 className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 aria-label="Natijalar va otzivlar"
               >
-                {REVIEWS.map((src, i) => (
-                  <li key={src} className="w-[72%] max-w-[300px] shrink-0 snap-center sm:w-[280px]">
+                {REVIEWS.map((r, i) => (
+                  <li key={r.src} className="w-[72%] max-w-[300px] shrink-0 snap-center sm:w-[280px]">
                     <button
                       type="button"
-                      onClick={() => setZoom(src)}
+                      onClick={() => setZoom(r.src)}
                       aria-label={`Natija ${i + 1} ni kattalashtirish`}
                       className="block w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)]"
                     >
-                      <Image src={src} alt={`O‘quvchi natijasi ${i + 1}`} width={800} height={1000} sizes="(max-width: 640px) 72vw, 300px" loading={i === 0 ? "eager" : "lazy"} className="h-auto w-full" />
+                      <Image src={r.src} alt={`O‘quvchi natijasi ${i + 1}`} width={r.width} height={r.height} sizes="(max-width: 640px) 72vw, 300px" loading={i === 0 ? "eager" : "lazy"} className="h-auto w-full" />
                     </button>
                   </li>
                 ))}
