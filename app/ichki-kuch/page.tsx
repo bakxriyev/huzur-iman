@@ -5,7 +5,7 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import TariffModal, { type Tarif } from "@/components/TariffModal";
 
-const PERSON_IMG = "/iman.png"; // public/iman.png
+const PERSON_IMG = "/iman.webp"; // public/iman.webp
 
 /** O‘quvchilar natijalari/otzivlari: rasmlarni public/ papkaga qo‘yib, shu yerga yozing.
  *  Masalan: ["/otziv-1.jpg", "/otziv-2.jpg"]. Bo‘sh bo‘lsa, joy ushlagichlar ko‘rinadi. */
@@ -303,9 +303,10 @@ export default function VSLPage() {
               <Image
                 src={PERSON_IMG}
                 alt="Iman Akhmedova"
-                width={1276}
-                height={1812}
-                priority
+                width={760}
+                height={1079}
+                preload
+                fetchPriority="high"
                 sizes="(max-width: 520px) 300px, 360px"
                 className="relative z-10 mx-auto h-auto w-full drop-shadow-[0_16px_28px_rgba(0,0,0,.45)]"
               />
