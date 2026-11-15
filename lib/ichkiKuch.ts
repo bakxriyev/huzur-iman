@@ -1,5 +1,3 @@
-import { supabase } from "@/lib/supabase";
-
 export type IchkiKuchLead = {
   full_name: string;
   phone_number: string;
@@ -20,6 +18,7 @@ export function detectSource(): string {
 }
 
 export async function submitIchkiKuchLead(payload: IchkiKuchLead) {
+  const { supabase } = await import("@/lib/supabase");
   const { error } = await supabase.from("ichki_kuch_leads").insert([payload]);
   if (error) throw error;
 }
