@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
     // Optimallashtirilgan rasmlar CDN'da uzoq saqlanadi (qayta tekshirish yo'q)
     minimumCacheTTL: 60 * 60 * 24 * 365,
   },
+  async rewrites() {
+    return {
+      // "/" ochilganda manzil o'zgarmaydi (redirect emas), ichki-kuch sahifasi ko'rsatiladi
+      beforeFiles: [{ source: "/", destination: "/ichki-kuch" }],
+    };
+  },
   async headers() {
     return [
       {
