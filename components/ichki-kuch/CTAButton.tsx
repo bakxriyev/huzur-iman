@@ -1,8 +1,10 @@
 "use client";
 
 import { UpArrow } from "./ui";
+import { trackEvent } from "@/lib/track";
 
 function goToTariffs() {
+  trackEvent("CTAClick");
   document.getElementById("tariflar")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 

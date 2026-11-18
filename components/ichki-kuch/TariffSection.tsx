@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import TariffModal, { type Tarif } from "@/components/TariffModal";
+import dynamic from "next/dynamic";
+import type { Tarif } from "@/components/TariffModal";
+import { trackEvent } from "@/lib/track";
+
+// Modal (forma + telefon kiritish) faqat kerak bo‘lganda yuklanadi
+const TariffModal = dynamic(() => import("@/components/TariffModal"), { ssr: false });
+
+function pick(t: Tarif, set: (t: Tarif) => void) {
+  trackEvent("InitiateCheckout", true);
+  set(t);
+}
 import { serif } from "@/lib/fonts";
 import { Check } from "./ui";
 
@@ -53,7 +63,7 @@ export default function TariffSection() {
             </p>
             <button
               type="button"
-              onClick={() => setTarif("VIP")}
+              onClick={() => pick("VIP", setTarif)}
               className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
             >
               Kursga yozilish
@@ -86,7 +96,7 @@ export default function TariffSection() {
             </p>
             <button
               type="button"
-              onClick={() => setTarif("Premium")}
+              onClick={() => pick("Premium", setTarif)}
               className="mt-5 w-full rounded-full bg-gradient-to-b from-[#7a0a2e] to-[#4a0220] px-6 py-4 text-[16px] font-extrabold uppercase tracking-wide text-[#f3d68f] shadow-[0_5px_0_0_#2a0010] transition-transform active:translate-y-[3px] sm:text-[18px]"
             >
               Kursga yozilish
@@ -95,7 +105,7 @@ export default function TariffSection() {
         </article>
       </div>
 
-      <TariffModal tarif={tarif} onClose={() => setTarif(null)} />
+      {tarif && <TariffModal tarif={tarif} onClose={() => setTarif(null)} />}
     </>
   );
 }

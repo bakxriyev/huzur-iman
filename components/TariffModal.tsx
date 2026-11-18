@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PhoneInput from "./PhoneInput";
 import { submitIchkiKuchLead, detectSource } from "@/lib/ichkiKuch";
+import { trackEvent } from "@/lib/track";
 
 export type Tarif = "VIP" | "Premium";
 
@@ -58,8 +59,12 @@ export default function TariffModal({
       `«Ichki kuch» kursiga ${tarif} tarifi bo‘yicha yozilmoqchiman.\n` +
       `Telefon raqamim: ${phone}`;
     const url = `https://t.me/${ADMINS[tarif]}?text=${encodeURIComponent(text)}`;
-    window.location.href = url;
-    setLoading(false);
+    trackEvent("Lead", true);
+    // Pixel so‘rovi ketishi uchun qisqa kutish, so‘ng Telegramga o‘tamiz
+    window.setTimeout(() => {
+      window.location.href = url;
+      setLoading(false);
+    }, 250);
   }
 
   return (

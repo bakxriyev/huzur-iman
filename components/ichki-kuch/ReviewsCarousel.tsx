@@ -34,7 +34,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
                 aria-label={`Natija ${i + 1} ni kattalashtirish`}
                 className="block w-full overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_rgba(74,2,32,.18)]"
               >
-                <Image src={r.src} alt={`O‘quvchi natijasi ${i + 1}`} width={r.width} height={r.height} sizes="(max-width: 640px) 72vw, 300px" loading={i === 0 ? "eager" : "lazy"} className="h-auto w-full" />
+                <Image src={r.src} alt={`O‘quvchi natijasi ${i + 1}`} width={r.width} height={r.height} sizes="(max-width: 640px) 72vw, 300px" loading="lazy" className="h-auto w-full" />
               </button>
             </li>
           ))}

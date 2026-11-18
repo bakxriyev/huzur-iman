@@ -1,13 +1,15 @@
 import { Playfair_Display, Montserrat } from "next/font/google";
 
+// Variable shriftlar: weight berilmasa bitta fayl yuklanadi (avval 6 ta edi).
+// Faqat "latin" kerak: matndagi ‘ belgisi (U+2018) latin to'plamida bor.
 export const serif = Playfair_Display({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["500", "600", "700", "800"],
+  subsets: ["latin"],
   display: "swap",
+  adjustFontFallback: true,
 });
 
 export const sans = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
+  adjustFontFallback: true,
 });
