@@ -96,22 +96,24 @@ export default function VSLPage() {
           <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-[#ffc2da]/25 blur-3xl" />
           <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-10 h-64 w-64 rounded-full bg-[#ffc2da]/15 blur-3xl" />
 
-          <div className="ik-hero relative z-10 mx-auto flex max-w-[820px] flex-col items-center text-center">
+          <div className="ik-hero  relative z-10 mx-auto flex max-w-[820px] -mt-10 flex-col items-center text-center">
             <p className="rounded-full border border-[#e6c47c]/60 bg-[#46021b]/60 px-5 py-2 text-[13px] font-bold tracking-wide text-[#f3d68f] sm:text-[15px]">
               23-noyabr · Ichki uyg‘onish
             </p>
 
             {/* Kichik shriftdagi qator */}
-            <p className="mt-4 max-w-[480px] text-[12px] font-semibold uppercase leading-snug tracking-wide text-[#fbeccb] sm:text-[14px]">
+            <p className="mt-2 max-w-[480px] text-[10px] font-semibold uppercase leading-snug tracking-wide text-[#fbeccb] sm:text-[12px]">
               45 kun Iman Akhmedova bilan birga jonli dars
             </p>
 
             {/* Asosiy (glavniy) gap */}
-            <h1 className={`${serif.className} ${GOLD} mt-5 text-balance text-[clamp(30px,8.2vw,64px)] font-bold leading-[1.18]`}>
-              Qanday qilib minnatdorchilik orqali qalb xotirjamligiga erishish mumkin?
+            <h1 className={`${serif.className} ${GOLD} mt-2 text-[clamp(25px,5.3vw,50px)] font-bold leading-[1.15]`}>
+              <span className="block whitespace-nowrap">Qanday qilib minnatdorchilik</span>
+              <span className="block whitespace-nowrap">orqali qalb xotirjamligiga</span>
+              <span className="block whitespace-nowrap">erishish mumkin?</span>
             </h1>
 
-            <div className="relative mt-8 w-full max-w-[300px] sm:max-w-[360px]">
+            <div className="relative -mt-2 w-full max-w-[300px] sm:max-w-[360px]">
               <div aria-hidden="true" className="ik-glow absolute left-1/2 top-[10%] h-[75%] w-[85%] -translate-x-1/2 rounded-full bg-[#ff9ccb]/40 blur-3xl" />
               <Image
                 src={PERSON_IMG}
@@ -125,7 +127,7 @@ export default function VSLPage() {
               />
             </div>
 
-            <div className="relative z-20 -mt-6 flex w-full justify-center sm:-mt-10">
+            <div className="relative z-20 -mt-20 flex w-full justify-center sm:-mt-25">
               <CTAButton />
             </div>
           </div>
