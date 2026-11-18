@@ -77,7 +77,7 @@ export default function VSLPage() {
         .ik-shine { animation: ikShine 3.2s ease-in-out infinite; }
         @keyframes ikShine { 0% { translate: 0 0; } 60%,100% { translate: 520% 0; } }
         .ik-hero { animation: ikHero .8s cubic-bezier(.2,.8,.2,1) both; }
-        @keyframes ikHero { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+        @keyframes ikHero { from { transform: translateY(14px); } to { transform: none; } }
         .ik-glow { animation: ikGlow 3.5s ease-in-out infinite; }
         @keyframes ikGlow { 0%,100% { opacity: .5; } 50% { opacity: .9; } }
         .ik-up { animation: ikUp 1.1s ease-in-out infinite; }
